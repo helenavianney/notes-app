@@ -1,0 +1,67 @@
+:root {
+    --primary: #6366f1;
+    --primary-dark: #4f46e5;
+    --secondary: #f59e0b;
+    --background: #f8fafc;
+    --surface: #ffffff;
+    --text: #1e293b;
+    --text-light: #64748b;
+    --accent: #10b981;
+    --border: #e2e8f0;
+    --shadow: rgba(0, 0, 0, 0.1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    line-height: 1.6;
+    color: var(--text);
+    background: var(--background);
+    padding-top: 70px;
+}
+
+main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 24px;
+    display: grid;
+    gap: 32px;
+}
+
+.notes-form {
+    background: var(--surface);
+    padding: 24px;
+    border-radius: 16px;
+    box-shadow: 0 4px 6px -1px var(--shadow);
+    border: 1px solid var(--border);
+    display: grid;
+    gap: 16px;
+}
+
+.notes-form button {
+    background: var(--primary);
+    color: white;
+    padding: 16px 32px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    justify-self: start;
+}
+
+.notes-form button:hover {
+    background: var(--primary-dark);
+    transform: translateY(-1px);
+    box-shadow: 0 8px 25px -8px var(--primary);
+}
+
+#notesListContainer {
+    min-height: 200px;
+}
