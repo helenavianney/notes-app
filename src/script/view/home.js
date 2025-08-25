@@ -5,18 +5,8 @@ const home = () => {
     const notesListContainer = document.getElementById('notesListContainer');
     const notesList = notesListContainer.querySelector('notes-list');
 
-    const addNote = ({title, body}) => {
-        NotesApi.addNotes({title, body})
-        .then((response) => {
-            const responseJson = response.json;
-        })
-        .then((responseJson) => {
-            notesList.notes = responseJson;
-            console.log('Catatan berhasil ditambahkan:', responseJson);
-        })
-        .catch((error) => {
-            console.error('Gagal menambahkan catatan:', error.message);
-        });
+    const addNote = async (title, body) => {
+        await NotesApi.addNotes(title, body);
         
         displayNotes();
     };

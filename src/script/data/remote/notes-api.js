@@ -17,7 +17,7 @@ class NotesApi {
         }
     }
 
-    static async addNotes({title, body}) {
+    static async addNotes(title, body) {
         try {
             const response = await fetch(`${baseUrl}/notes`, {
                 method: 'POST',
