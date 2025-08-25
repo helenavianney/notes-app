@@ -25,8 +25,8 @@ class NotesApi {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    title: String,
-                    body: String
+                    title,
+                    body
                 }),
             });
             if (!response.ok) {
