@@ -1,16 +1,16 @@
 class FooterBar extends HTMLElement {
-    _shadowRoot = null;
-    _style = null;
+  _shadowRoot = null;
+  _style = null;
 
-    constructor() {
-        super();
+  constructor() {
+    super();
 
-        this._shadowRoot = this.attachShadow({ mode: 'open' });
-        this._style = document.createElement('style');
-    }
+    this._shadowRoot = this.attachShadow({ mode: "open" });
+    this._style = document.createElement("style");
+  }
 
-    _updatedStyle() {
-        this._style.textContent = `
+  _updatedStyle() {
+    this._style.textContent = `
             :host {
                 display: block;
                 width: 100%;
@@ -29,27 +29,27 @@ class FooterBar extends HTMLElement {
                 font-size: 0.875rem;
             }
         `;
-    }
+  }
 
-    _emptyContent() {
-        this._shadowRoot.innerHTML = '';
-    }
+  _emptyContent() {
+    this._shadowRoot.innerHTML = "";
+  }
 
-    connectedCallback() {
-        this.render();
-    }
+  connectedCallback() {
+    this.render();
+  }
 
-    render() {
-        this._emptyContent();
-        this._updatedStyle();
+  render() {
+    this._emptyContent();
+    this._updatedStyle();
 
-        this._shadowRoot.appendChild(this._style);
-        this._shadowRoot.innerHTML += `
+    this._shadowRoot.appendChild(this._style);
+    this._shadowRoot.innerHTML += `
             <div>
                 <p class="copyright">&copy; 2025 by Helena</p>
             </div>
         `;
-    }
+  }
 }
 
-customElements.define('footer-bar', FooterBar);
+customElements.define("footer-bar", FooterBar);

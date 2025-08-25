@@ -1,22 +1,22 @@
-const { merge } = require('webpack-merge');
-const common = require('./webpack.common.cjs');
+const { merge } = require("webpack-merge");
+const common = require("./webpack.common.cjs");
 
 module.exports = merge(common, {
-  mode: 'production',
+  mode: "production",
   module: {
     rules: [
       {
         test: /\.js$/,
         exclude: /node_modules/,
         use: [
-            {
-                loader: 'babel-loader',
-                options: {
-                    presets: ['@babel/preset-env'],
-                },
+          {
+            loader: "babel-loader",
+            options: {
+              presets: ["@babel/preset-env"],
             },
+          },
         ],
-      }
+      },
     ],
   },
 });

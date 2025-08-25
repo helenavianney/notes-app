@@ -1,34 +1,42 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Notes App</title>
-</head>
-<body>
+  </head>
+  <body>
     <header>
-        <app-bar></app-bar>
+      <app-bar></app-bar>
     </header>
 
     <main>
-        <form action="" class="notes-form" id="notesForm">
+      <form action="" class="notes-form" id="notesForm">
+        <input-title maxlength="100" required></input-title>
 
-            <input-title maxlength="100" required></input-title>
-            
-            <input-detail min-height="150px" rows="6"></input-detail>
+        <input-detail min-height="150px" rows="6"></input-detail>
 
-            <button type="submit">➕ Add Notes</button>
-        </form>
+        <button type="submit">➕ Add Notes</button>
+      </form>
 
-        <section>
-            <div id="notesListContainer">
-                <notes-list empty-message="Tidak ada catatan tersimpan. Mulai menulis catatan pertama!"></notes-list>
-            </div>
-        </section>
+      <section>
+        <div class="tabs">
+          <button class="tab-btn active" data-tab="active">📝 Catatan Aktif</button>
+          <button class="tab-btn" data-tab="archived">📁 Arsip</button>
+        </div>
+        
+        <div id="notesListContainer">
+          <notes-list
+            empty-message="Tidak ada catatan tersimpan. Mulai menulis catatan pertama!"
+          ></notes-list>
+        </div>
+      </section>
     </main>
 
     <footer>
-        <footer-bar></footer-bar>
+      <footer-bar></footer-bar>
     </footer>
-</body>
+
+    <loading-indicator></loading-indicator>
+  </body>
 </html>

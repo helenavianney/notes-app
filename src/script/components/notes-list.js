@@ -1,26 +1,28 @@
+import { animate, stagger } from 'motion';
+
 class NotesList extends HTMLElement {
-    _shadowRoot = null;
-    _style = null;
-    _notes = [];
+  _shadowRoot = null;
+  _style = null;
+  _notes = [];
 
-    static get observedAttributes() {
-        return ['empty-message'];
+  static get observedAttributes() {
+    return ["empty-message"];
+  }
+
+  constructor() {
+    super();
+    this._shadowRoot = this.attachShadow({ mode: "open" });
+    this._style = document.createElement("style");
+  }
+
+  attributeChangedCallback(name, oldValue, newValue) {
+    if (oldValue !== newValue) {
+      this.render();
     }
+  }
 
-    constructor() {
-        super();
-        this._shadowRoot = this.attachShadow({ mode: 'open' });
-        this._style = document.createElement('style');
-    }
-
-    attributeChangedCallback(name, oldValue, newValue) {
-        if (oldValue !== newValue) {
-            this.render();
-        }
-    }
-
-    _updateStyle() {
-        this._style.textContent = `
+  _updateStyle() {
+    this._style.textContent = `
             :host {
                 display: block;
                 width: 100%;
@@ -41,6 +43,8 @@ class NotesList extends HTMLElement {
                 transition: all 0.2s ease;
                 position: relative;
                 overflow: hidden;
+                opacity: 0;
+                transform: translateY(20px);
             }
 
             .note-item::before {
@@ -76,7 +80,42 @@ class NotesList extends HTMLElement {
             .note-body {
                 color: #475569;
                 line-height: 1.6;
-                margin: 0;
+                margin: 0 0 16px 0;
+            }
+
+            .note-actions {
+                display: flex;
+                gap: 8px;
+            }
+
+            .delete-btn {
+                background: #ef4444;
+                color: white;
+                border: none;
+                padding: 8px 16px;
+                border-radius: 8px;
+                cursor: pointer;
+                font-size: 0.875rem;
+                transition: background-color 0.2s;
+            }
+
+            .delete-btn:hover {
+                background: #dc2626;
+            }
+
+            .archive-btn {
+                background: #f59e0b;
+                color: white;
+                border: none;
+                padding: 8px 16px;
+                border-radius: 8px;
+                cursor: pointer;
+                font-size: 0.875rem;
+                transition: background-color 0.2s;
+            }
+
+            .archive-btn:hover {
+                background: #d97706;
             }
 
             .empty-state {
@@ -94,53 +133,111 @@ class NotesList extends HTMLElement {
                 font-weight: 500;
             }
         `;
-    }
+  }
 
-    _emptyContent() {
-        this._shadowRoot.innerHTML = '';
-    }
+  _emptyContent() {
+    this._shadowRoot.innerHTML = "";
+  }
 
-    set notes(value) {
-        this._notes = value;
-        this.render();
-    }
+  set notes(value) {
+    this._notes = value;
+    this.render();
+  }
 
-    get notes() {
-        return this._notes;
-    }
+  get notes() {
+    return this._notes;
+  }
 
-    connectedCallback() {
-        this.render();
-    }
+  connectedCallback() {
+    this.render();
+  }
 
-    render() {
-        this._emptyContent();
-        this._updateStyle();
+  render() {
+    this._emptyContent();
+    this._updateStyle();
 
-        this._shadowRoot.appendChild(this._style);
+    this._shadowRoot.appendChild(this._style);
 
-        if (this._notes.length === 0) {
-            this._shadowRoot.innerHTML += `
+    if (this._notes.length === 0) {
+      this._shadowRoot.innerHTML += `
                 <div class="empty-state">
-                    <p>${this.getAttribute('empty-message')}</p>
+                    <p>${this.getAttribute("empty-message")}</p>
                 </div>
             `;
-        } else {
-            const notesHTML = this._notes.map(note => `
+    } else {
+      const notesHTML = this._notes
+        .map(
+          (note) => `
                 <div class="note-item">
                     <h3 class="note-title">${note.title}</h3>
-                    <p class="note-date">${new Date(note.createdAt).toLocaleDateString('id-ID')}</p>
+                    <p class="note-date">${new Date(note.createdAt).toLocaleDateString("id-ID")}</p>
                     <p class="note-body">${note.body}</p>
+                    <div class="note-actions">
+                        <button class="archive-btn" data-id="${note.id}">📁 Arsip</button>
+                        <button class="delete-btn" data-id="${note.id}">🗑️ Hapus</button>
+                    </div>
                 </div>
-            `).join('');
+            `,
+        )
+        .join("");
 
-            this._shadowRoot.innerHTML += `
+      this._shadowRoot.innerHTML += `
                 <div class="notes-container">
                     ${notesHTML}
                 </div>
             `;
-        }
+
+      this._setupDeleteButtons();
+      this._setupArchiveButtons();
+      this._animateNotes();
     }
+  }
+
+  _animateNotes() {
+    const noteItems = this._shadowRoot.querySelectorAll('.note-item');
+    
+    animate(
+      noteItems,
+      {
+        opacity: [0, 1],
+        transform: ['translateY(20px)', 'translateY(0px)']
+      },
+      {
+        duration: 0.5,
+        delay: stagger(0.1)
+      }
+    );
+  }
+
+  _setupDeleteButtons() {
+    const deleteButtons = this._shadowRoot.querySelectorAll(".delete-btn");
+    deleteButtons.forEach((button) => {
+      button.addEventListener("click", (event) => {
+        const noteId = event.target.getAttribute("data-id");
+        this.dispatchEvent(
+          new CustomEvent("delete-note", {
+            detail: { id: noteId },
+            bubbles: true,
+          }),
+        );
+      });
+    });
+  }
+
+  _setupArchiveButtons() {
+    const archiveButtons = this._shadowRoot.querySelectorAll(".archive-btn");
+    archiveButtons.forEach((button) => {
+      button.addEventListener("click", (event) => {
+        const noteId = event.target.getAttribute("data-id");
+        this.dispatchEvent(
+          new CustomEvent("archive-note", {
+            detail: { id: noteId },
+            bubbles: true,
+          }),
+        );
+      });
+    });
+  }
 }
 
-customElements.define('notes-list', NotesList);
+customElements.define("notes-list", NotesList);
