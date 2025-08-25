@@ -21,17 +21,9 @@ const home = () => {
         displayNotes();
     };
 
-    const displayNotes = () => {
-        NotesApi.getNotes()
-        .then((response) => {
-            const responseJson = response.json;
-        })    
-        .then((responseJson) => {
-            notesList.notes = responseJson;
-        })
-        .catch((error) => {
-            console.error('Gagal memuat catatan:', error.message);
-        });
+    const displayNotes = async () => {
+        const responseJson = await NotesApi.getNotes();
+        notesList.notes = responseJson;
     };
 
     const handleFormSubmit = (event) => {

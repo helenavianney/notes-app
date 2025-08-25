@@ -17,7 +17,7 @@ class NotesApi {
         }
     }
 
-    static async addNotes(title, body) {
+    static async addNotes({title, body}) {
         try {
             const response = await fetch(`${baseUrl}/notes`, {
                 method: 'POST',
@@ -25,8 +25,8 @@ class NotesApi {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    title,
-                    body,
+                    title: String,
+                    body: String
                 }),
             });
             if (!response.ok) {
